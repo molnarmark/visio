@@ -12,8 +12,11 @@ visio is a command line interface to store open source project ideas that you wa
 `visio help`
  - Will output a generic help message covering every command available in visio
 
-`visio list <filter || null>`
- - Will list the stored projects based on the filter given
+`visio list`
+ - Will list the stored project names
+
+`visio finish <project-name>`
+  - Gracefully removes the project and tells you that you did good
 
 `visio edit <project-name>`
  - Will give the same prompts as `visio new`
