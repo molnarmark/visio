@@ -1,0 +1,18 @@
+{
+  "name": "visio",
+  "version": "0.1.0",
+  "description": "Have an idea for an open source project, but too busy to implement it now? Store it with visio and get back to it!",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molnarmark/visio.git"
+  },
+  "author": "Mark Molnar <molnarpw@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^22.4.3"
+  }
+}
