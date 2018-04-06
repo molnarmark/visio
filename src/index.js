@@ -5,6 +5,8 @@
   const chalk = require('chalk');
   const readlineSync = require('readline-sync');
 
+  const debugMode = false;
+
   const difficultyOptions = [
     'Easy',
     'Medium',
@@ -24,6 +26,11 @@
   let currentProjects = {}
   let fileName = os.homedir() + '\\.visio';
 
+  function debug(message) {
+    if (debugMode)
+      console.warn(message);
+  }
+
   function parseCommand() {
     const commands = process.argv.splice(2);
     init();
@@ -33,6 +40,23 @@
       newProject();
       break;
 
+    case 'list':
+      listProjects();
+      break;
+
+    case 'remove':
+    case 'delete':
+      removeProject(commands[1]);
+      break;
+
+    case 'view':
+      viewProject(commands[1]);
+      break;
+
+    case 'finish':
+      finishProject(commands[1]);
+      break;
+
     case 'help':
       showHelp();
       break;
@@ -40,7 +64,13 @@
   }
 
   function init() {
-    // read the json file in
+    if (fs.existsSync(fileName)) {
+      currentProjects = JSON.parse(fs.readFileSync(fileName, 'UTF-8'));
+      debug('Projects file was read.');
+    } else {
+      debug('Should create the file.');
+      fs.openSync(fileName, 'w+');
+    }
   }
 
   function getRandomLine(type) {
@@ -49,18 +79,49 @@
   }
 
   function listProjects() {
-    // loop through each project and print the name of it
+    if (Object.keys(currentProjects) == 0) {
+      console.log(chalk.red.bold('You don\'t have any ideas as of now!\n'));
+    } else {
+      console.log(chalk.cyan.bold('Your stored ideas:\n'));
+      for (let key in currentProjects) {
+        console.log(chalk.white(`${chalk.yellow.underline(key)} with the difficulty listed as ${chalk.yellow.underline(currentProjects[key].hardness)}, to be implemented using ${chalk.yellow.underline(currentProjects[key].stack )}.`));
+      }
+    }
+  }
+
+  function viewProject(projectName) {
+    if (currentProjects[projectName] == null)
+      return console.log(chalk.red('This project does not exist.'));
+
+    console.log(`${chalk.cyan.underline('Project name:')} ${chalk.white(projectName)}`);
+    console.log(`${chalk.cyan.underline('Project description:')} ${chalk.white(currentProjects[projectName].description)}`);
+    console.log(`${chalk.cyan.underline('Project stack:')} ${chalk.white(currentProjects[projectName].stack)}`);
+    console.log(`${chalk.cyan.underline('Project difficulty:')} ${chalk.white(currentProjects[projectName].hardness)}`);
   }
 
   function appendProject(project) {
-    // append given JSON object. key => project.projectName
-    // write to file
+    currentProjects[project.projectName] = {
+      description : project.projectDescription,
+      stack       : project.projectStack,
+      hardness    : project.hardness
+    }
+
+    fs.writeFileSync(fileName, JSON.stringify(currentProjects), 'UTF-8');
+  }
+
+  function finishProject(projectName) {
+    if (currentProjects[projectName] == null)
+      return console.log(chalk.red('This project does not exist.'));
+    console.log(`${chalk.yellow('Congratulations!')} You just finished ${projectName}!`);
+    removeProject(projectName);
   }
 
   function removeProject(projectName) {
-    // check if project exists
-    // remove project object by key => projectName
-    // write to file
+    if (currentProjects[projectName] != null) {
+      delete currentProjects[projectName];
+    }
+
+    fs.writeFileSync(fileName, JSON.stringify(currentProjects), 'UTF-8');
   }
 
   function newProject() {
@@ -73,11 +134,11 @@
     project.projectDescription = readlineSync.question('');
     process.stdout.write(getRandomLine('description'));
 
-    process.stdout.write(chalk.white(`What technologies/or languages do you plan on using for ${chalk.bold.yellow(project.projectName + '?')} `));
+    process.stdout.write(chalk.white(`What technologies/languages do you plan on using for ${chalk.bold.yellow(project.projectName + '?')} `));
     project.projectStack = readlineSync.question('');
     process.stdout.write(getRandomLine('description'));
 
-    process.stdout.write(chalk.white(`How hard do you think implementing ${chalk.bold.yellow(project.projectName)} is? (${chalk.grey(difficultyOptions.join(', ') + ') ')} `));
+    process.stdout.write(chalk.white(`How hard do you think implementing ${chalk.bold.yellow(project.projectName)} is? (${chalk.grey(difficultyOptions.join(', ') + ')')} `));
     project.hardness = readlineSync.question('');
     process.stdout.write(chalk.cyan.bold(`\n🚀  Good luck on your development journey implementing ${project.projectName + '! 🚀'}`));
 
@@ -85,7 +146,18 @@
   }
 
   function showHelp() {
-    console.log('visio help');
+    console.log(chalk.white.underline('Commands:\n'));
+    console.log(`${chalk.yellow.underline('visio new')}:  ${chalk.white('Gives you a nice prompt to add a new project idea.\n')}`);
+    console.log(`${chalk.yellow.underline('visio list')}: ${chalk.white('Lists your stored project ideas, showing the name and the difficulty.\n')}`);
+    console.log(`${chalk.yellow.underline('visio view')}: ${chalk.white('View details about the given project idea.\n')}`);
+    console.log(`${chalk.yellow.underline('visio remove/delete <project-idea-name>')}: ${chalk.white('Deletes the given project idea.\n')}`);
+    console.log(`${chalk.yellow.underline('visio help')}: ${chalk.white('Shows this.\n')}`);
+    console.log(`${chalk.yellow.underline('visio finish')}: ${chalk.white('Finishes a project idea.\n')}`);
+
+    console.log(chalk.white.underline('About:\n'));
+
+    console.log(`${chalk.cyan.underline('visio')} ${chalk.white('was written by Mark Molnar.')}`);
+
   }
 
   parseCommand();
