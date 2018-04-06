@@ -1,5 +1,5 @@
+#!/usr/bin/env node
 (function() {
-
   const os = require('os');
   const fs = require('fs');
   const chalk = require('chalk');
@@ -149,10 +149,10 @@
     console.log(chalk.white.underline('Commands:\n'));
     console.log(`${chalk.yellow.underline('visio new')}:  ${chalk.white('Gives you a nice prompt to add a new project idea.\n')}`);
     console.log(`${chalk.yellow.underline('visio list')}: ${chalk.white('Lists your stored project ideas, showing the name and the difficulty.\n')}`);
-    console.log(`${chalk.yellow.underline('visio view')}: ${chalk.white('View details about the given project idea.\n')}`);
+    console.log(`${chalk.yellow.underline('visio view <project-idea-name>')}: ${chalk.white('View details about the given project idea.\n')}`);
     console.log(`${chalk.yellow.underline('visio remove/delete <project-idea-name>')}: ${chalk.white('Deletes the given project idea.\n')}`);
+    console.log(`${chalk.yellow.underline('visio finish <project-idea-name>')}: ${chalk.white('Finishes a project idea.\n')}`);
     console.log(`${chalk.yellow.underline('visio help')}: ${chalk.white('Shows this.\n')}`);
-    console.log(`${chalk.yellow.underline('visio finish')}: ${chalk.white('Finishes a project idea.\n')}`);
 
     console.log(chalk.white.underline('About:\n'));
 

@@ -1,21 +1,17 @@
 {
   "name": "visio",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "Have an idea for an open source project, but too busy to implement it now? Store it with visio and get back to it!",
   "main": "src/index.js",
-  "directories": {
-    "test": "tests"
-  },
-  "devDependencies": {
-    "jest": "^22.4.3"
-  },
   "scripts": {
-    "start": "node src/index.js",
-    "test": "jest"
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/molnarmark/visio.git"
+  },
+  "bin": {
+    "visio": "bin/visio"
   },
   "author": "Mark Molnar <molnarpw@gmail.com>",
   "license": "MIT",
@@ -24,7 +20,15 @@
   },
   "homepage": "https://github.com/molnarmark/visio#readme",
   "dependencies": {
-    "readline-promise": "^1.0.3",
+    "chalk": "^2.3.2",
     "readline-sync": "^1.4.9"
-  }
+  },
+  "keywords": [
+    "open source",
+    "open-source",
+    "ideas",
+    "projects",
+    "project-ideas",
+    "project-idea-management"
+  ]
 }
